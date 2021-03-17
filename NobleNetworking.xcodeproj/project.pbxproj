@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		243161912602C31F00519694 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 243161902602C31F00519694 /* LICENSE */; };
 		24895FCC24F75E85006D3772 /* NobleNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 24895FCA24F75E85006D3772 /* NobleNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		24895FD424F75EA6006D3772 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24895FD324F75EA6006D3772 /* NetworkRequest.swift */; };
 		24895FD624F76671006D3772 /* NetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24895FD524F76671006D3772 /* NetworkOperation.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		243161902602C31F00519694 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		24895FC724F75E85006D3772 /* NobleNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NobleNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24895FCA24F75E85006D3772 /* NobleNetworking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NobleNetworking.h; sourceTree = "<group>"; };
 		24895FCB24F75E85006D3772 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -47,6 +49,7 @@
 			isa = PBXGroup;
 			children = (
 				24895FDF24F76BD4006D3772 /* Readme.md */,
+				243161902602C31F00519694 /* LICENSE */,
 				24895FD224F75E93006D3772 /* Source */,
 				24895FC924F75E85006D3772 /* NobleNetworking */,
 				24895FC824F75E85006D3772 /* Products */,
@@ -154,6 +157,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				243161912602C31F00519694 /* LICENSE in Resources */,
 				24895FE024F76BD4006D3772 /* Readme.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -312,6 +316,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = NobleNetworking/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -338,6 +343,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = NobleNetworking/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
