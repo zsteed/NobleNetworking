@@ -106,7 +106,7 @@ extension NetworkOperation {
     /// Private method that is called inside operation method main()
     private func executeOperation() {
         switch httpMethod {
-        case .GET_DATA:
+        case .GET:
             request.getData(completion: handleResponse)
 
         case .GET_URL:

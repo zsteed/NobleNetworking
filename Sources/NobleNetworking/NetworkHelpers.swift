@@ -9,7 +9,7 @@
 import Foundation
 
 
-// MARK: - Network handler typealias
+// MARK: - Network handler type alias
 
 public typealias NetworkResponseResult = Result<NetworkResponseData, NetworkResponseError>
 public typealias NetworkResponseCallback = (NetworkResponseResult) -> Void
@@ -30,7 +30,7 @@ open class NetworkResponseData {
         self.url = url
     }
 
-    public func dataAsCsv() -> [String]? {
+    public func dataAsCSV() -> [String]? {
         guard let data = data else {
             return nil
         }
@@ -38,7 +38,7 @@ open class NetworkResponseData {
         return HTTPUtil.parseCsvResponse(data)
     }
 
-    public func dataAsJson() -> JSONDictionary? {
+    public func dataAsJSON() -> JSONDictionary? {
         guard let data = data else {
             return nil
         }
@@ -62,7 +62,7 @@ open class NetworkResponseData {
 public class NetworkResponseError: Error {
 
     public let httpResponse: HTTPURLResponse
-    public let error: Error?
+    public let httpError: Error?
 
     public var httpStatus: HTTPStatus {
         let statusCode = httpResponse.statusCode
@@ -85,9 +85,9 @@ public class NetworkResponseError: Error {
         case unlisted
     }
 
-    public init(httpResponse: HTTPURLResponse, error: Error? = nil) {
+    public init(httpResponse: HTTPURLResponse, httpError: Error? = nil) {
         self.httpResponse = httpResponse
-        self.error = error
+        self.httpError = httpError
     }
 
 }
@@ -97,7 +97,7 @@ public class NetworkResponseError: Error {
 
 /// Sets HTTP Method for networking
 public enum HTTPMethod {
-    case GET_DATA
+    case GET
     case GET_URL
     case POST(Any?)
     case POST_FORM([MultipartValues])
@@ -107,7 +107,7 @@ public enum HTTPMethod {
 
     public var value: String {
         switch self {
-        case .GET_DATA, .GET_URL: return "GET"
+        case .GET, .GET_URL: return "GET"
         case .POST, .POST_FORM: return "POST"
         case .PUT: return "PUT"
         case .DELETE, .DELETE_PAYLOAD: return "DELETE"
@@ -136,4 +136,14 @@ public struct MultipartValues {
     public let fileName: String
     public let data: Data
     public let mimeType: MimeType
+
+    public init(keyName: String,
+                fileName: String,
+                data: Data,
+                mimeType: MimeType) {
+        self.keyName = keyName
+        self.fileName = fileName
+        self.data = data
+        self.mimeType = mimeType
+    }
 }

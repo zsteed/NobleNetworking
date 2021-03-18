@@ -72,7 +72,7 @@ extension NetworkRequest {
     }
 
     public func getData(completion: @escaping NetworkResponseCallback) {
-        executeDataRequest(httpMethod: .GET_DATA, completion: completion)
+        executeDataRequest(httpMethod: .GET, completion: completion)
     }
 
     public func getDownloadUrl(completion: @escaping NetworkResponseCallback) {
@@ -157,7 +157,7 @@ extension NetworkRequest {
                                               error: Error?,
                                               completion: @escaping NetworkResponseCallback) {
         if let error = error {
-            completion(.failure(NetworkResponseError(httpResponse: response as! HTTPURLResponse, error: error)))
+            completion(.failure(NetworkResponseError(httpResponse: response as! HTTPURLResponse, httpError: error)))
             return
         }
 
@@ -173,7 +173,7 @@ extension NetworkRequest {
             }
 
         default:
-            completion(.failure(NetworkResponseError(httpResponse: httpResponse, error: error)))
+            completion(.failure(NetworkResponseError(httpResponse: httpResponse, httpError: error)))
 
         }
     }
@@ -214,7 +214,7 @@ extension NetworkRequest {
                                       error: Error?,
                                       completion: @escaping NetworkResponseCallback) {
         if let error = error {
-            completion(.failure(NetworkResponseError(httpResponse: response as! HTTPURLResponse, error: error)))
+            completion(.failure(NetworkResponseError(httpResponse: response as! HTTPURLResponse, httpError: error)))
             return
         }
 
@@ -230,7 +230,7 @@ extension NetworkRequest {
             }
 
         default:
-            completion(.failure(NetworkResponseError(httpResponse: httpResponse, error: error)))
+            completion(.failure(NetworkResponseError(httpResponse: httpResponse, httpError: error)))
 
         }
     }

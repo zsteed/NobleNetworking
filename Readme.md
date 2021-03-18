@@ -1,97 +1,103 @@
-## Are you an iOS Dev who loves networking libraries more than you should?
+## This networking class has 2 different ways of sending network requests
 
 
-## How does this networking library work! Lets see a simple example
+## 1. NetworkRequest
 
+```
 
-  ```
-  // Make request object
-  let req = NetworkRequest(endpoint: "www.google.com")
-  
-  // Call `getData`
-  req.getData { result in
-  
-  // Response is either a success if httpStatusCode in range 200...299
-  // Or a failure with enum cases to handle different scenarios
+// Basic HTTP GET request
+
+let request = NetworkRequest(endpoint: "https://www.google.com")
+request.getData { result in
+    
+}
+
+```
+
+Network request supports `GET, DELETE, PUT, POST, MULTIFORM`
+
+## Easy AF network response parsing.
+```
+
+let request = NetworkRequest(endpoint: "https://www.google.com")
+
+request.getData { result in
     switch result {
     case .success(let response):
-        // Raw data
-        print(response.data)
-
-        // CSV
-        print(response.dataAsCsv()!)
-
-        // JSON
-        print(response.dataAsJson()!)
-
-        // Decodable
-        print(response.dataAsDecodable(FooObject.self)!)
-
-        // HTTPURLResponse object
-        print(response.httpResponse)
-
+        let data: Data? = response.data
+        
+        let lines: [String] = response.dataAsCSV()
+        
+        let json: [String: Any] = response.dataAsJSON()
+        
+        let foo: Foo = responseDataAsDecodable(Foo.self)
+        
+        let httpResponse: HTTPURLResponse = response.httpResponse
+        
+        let url: URL? = response.url
+        
     case .failure(let error):
-        // error is an enum that returns different error reasons.
-        print(error.localizedDescription)
-
+        
+        let httpResponse: HTTPURLResponse = error.httpResponse
+        
+        let error: Error = error.httpError
+        
+        // Local enum for simple http status viewing
+        let status: HTTPStatus = error.httpStatus
+        
     }
-  }
-  ````
+}
 
 
-### More simple examples
+// Simple Multipart example
 
-#### DELETE, GET, POST, PUT, MULTIFORM
+let req = NetworkRequest(endpoint: "www.google.com")
 
-```
-  let req = NetworkRequest(endpoint: "www.google.com")
-  
-  req.getData
-  req.deleteAtEndpoint
-  req.deletePayload
-  req.getDownloadUrl
-  req.postMultipart
-  req.postPayload
-  req.putPayload
-```
-
-
-  #### Now this is not all, this library supports networking with operations
+let values: [MultipartValues] = [MultipartValues(keyName: "file", 
+                                                 fileName: "myImage", 
+                                                 data: Data(),
+                                                 mimetype: .png)]
+req.postMultipart(multipartValues: values) { result in
+    
+}
 
 
 ```
-  // Make a new Request
-  let request = NetworkRequest(endpoint: "www.github.com")
-
-  // Add your request to a Network Operation
-  let operation = NetworkOperation(uniqueId: "LoginOpV2_\(username)", httpMethod: .POST(payload), request: request) { result in
-    print(result)
-  }
-  
-  operation.execute()
-  
-  ```
-
-#### So `NetworkOperation` is built on top of `OperationQueue`
 
 
-  ///  ** Benefits **
-  ///  1. Handles duplicate entries
-  ///  2. Queue ( handles not overloading the system )
-  ///  3. Quality of service ( Range of UserInitiated vs utility )
-  ///  4. Dependency chaining ( ie other operations )
-  ///  5. Will retry failed operation 3 times
-  ///  6. If subclassed, will attempt to restore if http status code is 401
+
+## 2. NetworkOperation
+```
+
+// Create request to pass into your operation
+let request = NetworkRequest(endpoint: "www.github.com")
+
+let operation = NetworkOperation(httpMethod: .POST(payload), request: request) { result in
+  print(result)
+}
+
+operation.execute()
+
+```
+
+
+
+####  `NetworkOperation` is built on top of  `OperationQueue`
+
+
+## Benefits
+1. Implicitly ignores duplicate entries
+2. Queue ( handles not overloading the system )
+3. Quality of service ( Range of UserInitiated vs utility )
+4. Dependency chaining ( ie other operations )
+5. Will retry failed operation 3 times
+6. If subclassed, will attempt to restore if http status code is 401
   
   
   
   #### Here is an example of dependencies with operations 
   
   ```
-    // Wait, what about dependency chaining, that's what operation's are all about.
-    // Great, glad you asked.
-    
-    ...Behold...
     
     func specialOperation1() -> NetworkOperation {}
     func sweetOperation2() -> NetworkOperation {}
@@ -103,14 +109,10 @@
     ])
     
 
-    // This "execute" begins all "dependent" operations and the "done" operation. 
+    // This "execute" begins all "dependent" operations and wait for a response 
     doneOperation.execute { success in
-      print("Was successful == \(success)"
+      print(success)
     }
-    
-    
-    // Now the done operation won't execute until both 'dependentOperations' finish.
-    // Special note, if any of those operations "fail", you will receive an result.error  
 
   ```
   
@@ -127,14 +129,14 @@ Great, then subclass NetworkOperation and override this method.
                                  completion: @escaping (Bool) -> Void) {
 
       // Go try and re-authenticate
-      Auth.AuthenticateMe() { // Or whatever you name it
+      YourAuthClass.Authenticate() { // Or whatever you name it
       
         // Call the closure passing a success or failure
         completion(success)
         
       }
 
-      // Now every `AuthNetworkOperation` will try 3 times to restore the session for you & complete the original network call
+      // Now every `AuthNetworkOperation` will try 3 times to restore the session for you AND complete the original network call
       
       // Yay!
 
